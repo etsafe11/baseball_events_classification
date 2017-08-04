@@ -1,9 +1,16 @@
 # Load required packages
-library(plyr)
+install.packages("caret")
+install.packages("party")
+install.packages("mboost")
+install.packages("plotly")
+install.packages("dplyr")
+
 library(caret)
 library(party)
 library(mboost)
 library(plotly)
+library(dplyr)
+
 
 # Set working directory
 setwd("C://Users/ethompson/Desktop/Projects/Statcast")
@@ -34,7 +41,7 @@ method <- 'rf' # random forest
 ctrl <- trainControl(method = 'repeatedcv', number = 5, repeats = 5)
 modelFit <- train(events ~ launch_angle + launch_speed, 
         method = method, data = training, trControl = ctrl)
-modelFit
+
 # Run the model on the test set
 predicted <- predict(modelFit, newdata = testing)
 # Confusion matrix
@@ -54,6 +61,6 @@ plotPredictions <- predict(modelFit, newdata = plotDF)
 plotDF$pred <- plotPredictions
 
 p <- plot_ly(data = plotDF, x = ~ launch_speed, y = ~ launch_angle, 
-             color = ~ pred, type = "scatter", mode = "markers") %>%
-  layout(title = "Launch Speed + Launch Angle")
+        color = ~ pred, type = "scatter", mode = "markers") %>%
+        layout(title = "Launch Speed + Launch Angle")
 p
